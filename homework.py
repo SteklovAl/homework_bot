@@ -35,6 +35,11 @@ HOMEWORK_STATUSES = {
 
 
 def send_message(bot, message):
+    """
+    Отправляет сообщение в Telegram чат, определяемый переменной окружения
+    TELEGRAM_CHAT_ID. Принимает на вход два параметра: экземпляр класса Bot
+    и строку с текстом сообщения.
+    """
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
         logger.info(
@@ -45,9 +50,11 @@ def send_message(bot, message):
 
 
 def get_api_answer(current_timestamp):
-    """Делает запрос к единственному эндпоинту API-сервиса. В качестве параметра
+    """
+    Делает запрос к единственному эндпоинту API-сервиса. В качестве параметра
     функция получает временную метку. В случае успешного запроса должна вернуть
-    ответ API, преобразовав его из формата JSON к типам данных Python."""
+    ответ API, преобразовав его из формата JSON к типам данных Python.
+    """
     timestamp = current_timestamp
     params = {'from_date': timestamp}
     try:
@@ -64,10 +71,12 @@ def get_api_answer(current_timestamp):
 
 
 def check_response(response):
-    """проверяет ответ API на корректность. В качестве параметра функция получает
+    """
+    Проверяет ответ API на корректность. В качестве параметра функция получает
     ответ API, приведенный к типам данных Python. Если ответ API соответствует
     ожиданиям, то функция должна вернуть список домашних работ (он может быть и
-    пустым), доступный в ответе API по ключу 'homeworks'."""
+    пустым), доступный в ответе API по ключу 'homeworks'.
+    """
     if type(response) is not dict:
         raise TypeError('Ответ API отличен от словаря')
     try:
@@ -84,11 +93,13 @@ def check_response(response):
 
 
 def parse_status(homework):
-    """ извлекает из информации о конкретной домашней работе статус этой работы.
+    """
+    Извлекает из информации о конкретной домашней работе статус этой работы.
     В качестве параметра функция получает только один элемент из списка
     домашних работ. В случае успеха, функция возвращает подготовленную для
     отправки в Telegram строку, содержащую один из вердиктов словаря
-    HOMEWORK_STATUSES."""
+    HOMEWORK_STATUSES.
+    """
     homework_name = homework['homework_name']
     homework_status = homework['status']
     if homework_status not in HOMEWORK_STATUSES:
@@ -99,9 +110,11 @@ def parse_status(homework):
 
 
 def check_tokens():
-    """Проверяет доступность переменных окружения, которые необходимы для
+    """
+    Проверяет доступность переменных окружения, которые необходимы для
     работы программы. Если отсутствует хотя бы одна переменная окружения —
-    функция должна вернуть False, иначе — True."""
+    функция должна вернуть False, иначе — True.
+    """
     if all([PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID]):
         return True
 
