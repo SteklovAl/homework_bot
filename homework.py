@@ -6,6 +6,8 @@ import time
 import requests
 import telegram
 from dotenv import load_dotenv
+from http import HTTPStatus
+
 
 load_dotenv()
 
@@ -58,7 +60,9 @@ def get_api_answer(current_timestamp):
     except Exception as error:
         logger.error(f'Ошибка при запросе к основному API: {error}')
         raise Exception(f'Ошибка при запросе к основному API: {error}')
-
+    if homework_statuses.status_code != HTTPStatus.OK:
+        logging.error(f'Ошибка {homework_statuses.status_code}')
+        raise Exception(f'Ошибка {homework_statuses.status_code}')
     return homework_statuses.json()
 
 
